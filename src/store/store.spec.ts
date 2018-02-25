@@ -1,6 +1,5 @@
 import { Command, ReducerCommand, store, State } from './command';
 
-
 @State()
 class Store1State {
   public IsLoading: boolean;
@@ -20,14 +19,14 @@ export function getStore(): Store1State {
 }
 
 @Command(Store1State)
-class Store1Command extends ReducerCommand<State> {
+class Store1Command extends ReducerCommand<Store1State> {
   public Handle() {
     this.State.IsLoading = true;
   }
 }
 
 @Command(Store1State)
-class Store2Command extends ReducerCommand<State> {
+class Store2Command extends ReducerCommand<Store1State> {
   public Handle() {
     this.State.IsBusy = true;
   }
