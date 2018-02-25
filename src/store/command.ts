@@ -6,25 +6,33 @@ export class ReducerCommand<T> {
   public Dispatch: Function;
 }
 
+export class Store<T> {
+  public State: T;
+}
+
 export const store = new Map<string, any>();
+
+export function State(): PropertyDecorator {
+  return function (target: Function) {
+    if (!store.has(target.name)) {
+      store.set(target.name, { ...target.prototype.initialize() });
+    }
+  }
+}
 
 /**
  * Pass in the state for the store
  */
-export function Command(storeName: string, state: any): PropertyDecorator {
+export function Command(state: Function): PropertyDecorator {
   return function (target: Function) {
     if (!target.name.endsWith('Command')) {
       throw Error('Class name must end with Command');
     } else {
-      if (!store.has(storeName)) {
-        store.set(storeName, { ...state });
-      }
-
-      target.prototype.State = state;
       target.prototype.CommandName = target.name;
       target.prototype.Dispatch = () => {
+        target.prototype.State = { ...store.get(state.name) };
         target.prototype.Handle();
-        state = { ...state }
+        store.set(state.name, target.prototype.State);
       }
     }
   }

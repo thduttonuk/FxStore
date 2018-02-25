@@ -1,25 +1,32 @@
-import { Command, ReducerCommand, store } from './command';
+import { Command, ReducerCommand, store, State } from './command';
 
-interface State {
-  IsLoading: boolean;
-  IsBusy: boolean;
-  Value: string
+
+@State()
+class Store1State {
+  public IsLoading: boolean;
+  public IsBusy: boolean;
+  public Value: string;
+
+  public initialize() {
+    this.IsLoading = false;
+    this.IsBusy = false;
+    this.Value = '';
+    return this;
+  }
 }
 
-const initialStore1State: State = {
-  IsLoading: false,
-  IsBusy: false,
-  Value: ''
+export function getStore(): Store1State {
+  return { ...store.get(Store1State.name) };
 }
 
-@Command('store1', initialStore1State)
+@Command(Store1State)
 class Store1Command extends ReducerCommand<State> {
   public Handle() {
     this.State.IsLoading = true;
   }
 }
 
-@Command('store1', initialStore1State)
+@Command(Store1State)
 class Store2Command extends ReducerCommand<State> {
   public Handle() {
     this.State.IsBusy = true;
@@ -43,33 +50,33 @@ test('should change is loading', () => {
   const store1Command = new Store1Command();
   store1Command.Dispatch();
 
-  expect(initialStore1State.IsLoading).toBeTruthy();
+  expect(getStore().IsLoading).toBeTruthy();
 });
 
 test('should change is busy', () => {
   const store2Command = new Store2Command();
   store2Command.Dispatch();
 
-  expect(initialStore1State.IsBusy).toBeTruthy();
+  expect(getStore().IsBusy).toBeTruthy();
 });
 
 test('should be immuteable', () => {
-  initialStore1State.Value = '123';
+  getStore().Value = '123';
 
   const store2Command = new Store2Command();
   store2Command.Dispatch();
 
-  expect(store.get('store1').Value).toBe('');
+  expect(getStore().Value).toBe('');
 });
 
 test('should contain store', () => {
   expect(store.size).toBe(1);
-  expect(store.get('store1')).toBeTruthy();
+  expect(getStore()).toBeTruthy();
 });
 
 test('should not set store twice', () => {
   expect(store.size).toBe(1);
-  expect(store.get('store1')).toBeTruthy();
+  expect(getStore()).toBeTruthy();
 });
 
 
