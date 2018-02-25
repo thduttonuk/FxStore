@@ -1,0 +1,25 @@
+{
+  "name": "fxstore",
+  "version": "1.0.0",
+  "description": "Fx store is a flux framework to manage store state in Angular",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thduttonuk/FxStore.git"
+  },
+  "keywords": [
+    "Angular",
+    "Flux",
+    "Redux",
+    "NgRx"
+  ],
+  "author": "Tom Dutton",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thduttonuk/FxStore/issues"
+  },
+  "homepage": "https://github.com/thduttonuk/FxStore#readme"
+}
