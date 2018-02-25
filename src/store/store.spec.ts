@@ -45,4 +45,15 @@ test('should change state', () => {
   expect(initialStore1State.IsBusy).toBeTruthy();
 });
 
+test('should change state', () => {
+  const store1Command1: any = new Store1Command();
+  const store1Command2: any = new Store1Command();
+  const store1Command3: any = new Store1Command();
+  store1Command1.Dispatch();
+
+  expect(initialStore1State.IsLoading).toBeTruthy();
+  expect(initialStore1State.IsBusy).toBeTruthy();
+});
+
+
 
