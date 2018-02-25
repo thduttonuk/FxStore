@@ -1,4 +1,4 @@
-## Creating a reducer example
+## Creating a command
 
 ```javascript
 
@@ -19,4 +19,13 @@ class Store1Command {
   }
 }
 
+```
+
+## Dispatch a command example
+
+```javascript
+
+  const store1Command: any = new Store1Command();
+  store1Command.Dispatch();
+  
 ```
