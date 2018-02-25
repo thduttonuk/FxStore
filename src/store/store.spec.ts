@@ -1,34 +1,30 @@
-import { Store } from '.';
-import { Command, ReducerCommand } from './command_metadata';
+import { Command, ReducerCommand, store } from './command';
 
 interface State {
   IsLoading: boolean;
   IsBusy: boolean;
+  Value: string
 }
 
 const initialStore1State: State = {
   IsLoading: false,
-  IsBusy: false
+  IsBusy: false,
+  Value: ''
 }
 
-@Command(initialStore1State)
+@Command('store1', initialStore1State)
 class Store1Command extends ReducerCommand<State> {
   public Handle() {
     this.State.IsLoading = true;
   }
 }
 
-@Command(initialStore1State)
+@Command('store1', initialStore1State)
 class Store2Command extends ReducerCommand<State> {
   public Handle() {
     this.State.IsBusy = true;
   }
 }
-
-test('should create', () => {
-  const store = new Store<any>();
-  expect(store).toBeTruthy();
-});
 
 test('should throw if class is not named Command', () => {
   expect(() => {
@@ -56,6 +52,28 @@ test('should change is busy', () => {
 
   expect(initialStore1State.IsBusy).toBeTruthy();
 });
+
+test('should be immuteable', () => {
+  initialStore1State.Value = '123';
+
+  const store2Command = new Store2Command();
+  store2Command.Dispatch();
+
+  expect(store.get('store1').Value).toBe('');
+});
+
+test('should contain store', () => {
+  expect(store.size).toBe(1);
+  expect(store.get('store1')).toBeTruthy();
+});
+
+test('should not set store twice', () => {
+  expect(store.size).toBe(1);
+  expect(store.get('store1')).toBeTruthy();
+});
+
+
+
 
 
 
