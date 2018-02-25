@@ -9,13 +9,13 @@ interface State {
 
 const initialStore1State: State = {
   IsLoading: false,
-  IsBusy: true
+  IsBusy: false
 }
 
 @Command(initialStore1State)
-class Store1Command {
-  public Handle(state: State) {
-    state.IsLoading = true;
+class Store1Command extends ReducerCommand<State> {
+  public Handle() {
+    this.State.IsLoading = true;
   }
 }
 
@@ -25,7 +25,7 @@ class Store1Command {
 
 ```javascript
 
-  const store1Command: any = new Store1Command();
+  const store1Command = new Store1Command();
   store1Command.Dispatch();
   
 ```

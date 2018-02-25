@@ -12,16 +12,16 @@ const initialStore1State: State = {
 }
 
 @Command(initialStore1State)
-class Store1Command {
-  public Handle(state: State) {
-    state.IsLoading = true;
+class Store1Command extends ReducerCommand<State> {
+  public Handle() {
+    this.State.IsLoading = true;
   }
 }
 
 @Command(initialStore1State)
-class Store2Command {
-  public Handle(state: State) {
-    state.IsBusy = true;
+class Store2Command extends ReducerCommand<State> {
+  public Handle() {
+    this.State.IsBusy = true;
   }
 }
 
@@ -44,14 +44,14 @@ test('should add dispatch command name', () => {
 });
 
 test('should change is loading', () => {
-  const store1Command: any = new Store1Command();
+  const store1Command = new Store1Command();
   store1Command.Dispatch();
 
   expect(initialStore1State.IsLoading).toBeTruthy();
 });
 
 test('should change is busy', () => {
-  const store2Command: any = new Store2Command();
+  const store2Command = new Store2Command();
   store2Command.Dispatch();
 
   expect(initialStore1State.IsBusy).toBeTruthy();
