@@ -1,6 +1,6 @@
 {
   "name": "fxstore",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Fx store is a flux framework to manage store state in Angular",
   "main": "index.js",
   "scripts": {
