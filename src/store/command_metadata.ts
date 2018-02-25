@@ -15,7 +15,6 @@ export function Command(state: any): PropertyDecorator {
     } else {
       target.prototype.CommandName = target.name;
       target.prototype.Dispatch = () => {
-        console.log('dispatch')
         target.prototype.Handle(state);
         state = { ...state }
       }
