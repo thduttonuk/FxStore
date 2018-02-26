@@ -55,7 +55,7 @@ setValueCommand.Dispatch('My new value');
 
 ## Create a selector example
 
-````javascript
+```javascript
 
 const o = createSelector<Store1State>(x => x.IsLoading, Store1State.name);
 
