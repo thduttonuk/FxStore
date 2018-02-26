@@ -1,4 +1,5 @@
-import { Command, ReducerCommand, store, State } from './command';
+import { Command, ReducerCommand, store, State, createSelector } from './command';
+import { take, bufferTime } from 'rxjs/operators'
 
 @State()
 class Store1State {
@@ -43,7 +44,7 @@ test('should throw if class is not named Command', () => {
   }).toThrow();
 });
 
-export function getStore(): IsLoadingCommand {
+export function getStore(): Store1State {
   return { ...store.get(Store1State.name) };
 }
 
@@ -90,6 +91,45 @@ test('should use payload', () => {
   store3Command.Dispatch('My string');
 
   expect(getStore().Value).toBe('My string');
+});
+
+test('should emit an update', (done) => {
+  const o = createSelector<Store1State>(x => x.Value, Store1State.name);
+  o.subscribe((value) => {
+    expect(value).toBe('My new string 123');
+    done();
+  })
+
+  const store3Command = new SetValueCommand();
+  store3Command.Dispatch('My new string 123');
+});
+
+test('should emit if two updates', (done) => {
+  const o = createSelector<Store1State>(x => x.Value, Store1State.name);
+  o.pipe(bufferTime(100)).subscribe((values) => {
+    expect(values[0]).toBe('My new string 123');
+    expect(values[1]).toBe('My new string 1234');
+    done();
+  })
+
+  const store3Command = new SetValueCommand();
+  store3Command.Dispatch('My new string 123');
+  store3Command.Dispatch('My new string 1234');
+});
+
+xtest('should not emit if three updates if values are the same', (done) => {
+  const o = createSelector<Store1State>(x => x.Value, Store1State.name);
+  o.pipe(bufferTime(100)).subscribe((values) => {
+    expect(values[0]).toBe('My new string 123');
+    expect(values[1]).toBe('My new string 1234');
+    expect(values.length).toBe(2);
+    done();
+  })
+
+  const store3Command = new SetValueCommand();
+  store3Command.Dispatch('My new string 123');
+  store3Command.Dispatch('My new string 123');
+  store3Command.Dispatch('My new string 1234');
 });
 
 

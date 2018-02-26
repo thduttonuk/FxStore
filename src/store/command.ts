@@ -1,4 +1,15 @@
 import { Subject } from 'rxjs/Subject'
+import { Observable } from 'rxjs/Observable';
+import { Observer } from 'rxjs/Observer';
+
+export class MemorizedSelector extends Subject<any> {
+  public func: Function;
+  public storeName: string;
+
+  public run() {
+    this.next(this.func(store.get(this.storeName)));
+  }
+}
 
 export class ReducerCommand<T, U> {
   public State: T;
@@ -8,6 +19,8 @@ export class ReducerCommand<T, U> {
 }
 
 export const store = new Map<string, any>();
+
+const selectors = new Map<string, Array<MemorizedSelector>>();
 
 export function State(): PropertyDecorator {
   return function (target: Function) {
@@ -31,7 +44,28 @@ export function Command(state: Function): PropertyDecorator {
         target.prototype.State = { ...store.get(state.name) };
         target.prototype.Handle();
         store.set(state.name, target.prototype.State);
+        dispatchStateChange(state.name);
       }
+    }
+  }
+}
+
+export function createSelector<T>(select: (s: T) => {}, storeName: string): Observable<any> {
+  const subject = new MemorizedSelector();
+  subject.func = select;
+  subject.storeName = storeName;
+
+  selectors.set(storeName, [subject]);
+  return subject;
+}
+
+function dispatchStateChange(storeName: string) {
+  if (selectors.has(storeName)) {
+    console.log(storeName)
+    const subjects = selectors.get(storeName);
+
+    for (const subject of subjects) {
+      subject.run();
     }
   }
 }
