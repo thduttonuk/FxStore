@@ -14,21 +14,24 @@ class Store1State {
   }
 }
 
-export function getStore(): Store1State {
-  return { ...store.get(Store1State.name) };
-}
-
 @Command(Store1State)
-class Store1Command extends ReducerCommand<Store1State> {
+class IsLoadingCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsLoading = true;
   }
 }
 
 @Command(Store1State)
-class Store2Command extends ReducerCommand<Store1State> {
+class IsBusyCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsBusy = true;
+  }
+}
+
+@Command(Store1State)
+class SetValueCommand extends ReducerCommand<Store1State, string> {
+  public Handle() {
+    this.State.Value = this.Payload;
   }
 }
 
@@ -40,20 +43,24 @@ test('should throw if class is not named Command', () => {
   }).toThrow();
 });
 
+export function getStore(): IsLoadingCommand {
+  return { ...store.get(Store1State.name) };
+}
+
 test('should add dispatch command name', () => {
-  const store1Command = new Store1Command();
-  expect((<any>store1Command).CommandName).toBe('Store1Command')
+  const store1Command = new IsLoadingCommand();
+  expect((<any>store1Command).CommandName).toBe('IsLoadingCommand')
 });
 
 test('should change is loading', () => {
-  const store1Command = new Store1Command();
+  const store1Command = new IsLoadingCommand();
   store1Command.Dispatch();
 
   expect(getStore().IsLoading).toBeTruthy();
 });
 
 test('should change is busy', () => {
-  const store2Command = new Store2Command();
+  const store2Command = new IsBusyCommand();
   store2Command.Dispatch();
 
   expect(getStore().IsBusy).toBeTruthy();
@@ -62,7 +69,7 @@ test('should change is busy', () => {
 test('should be immuteable', () => {
   getStore().Value = '123';
 
-  const store2Command = new Store2Command();
+  const store2Command = new IsBusyCommand();
   store2Command.Dispatch();
 
   expect(getStore().Value).toBe('');
@@ -76,6 +83,13 @@ test('should contain store', () => {
 test('should not set store twice', () => {
   expect(store.size).toBe(1);
   expect(getStore()).toBeTruthy();
+});
+
+test('should use payload', () => {
+  const store3Command = new SetValueCommand();
+  store3Command.Dispatch('My string');
+
+  expect(getStore().Value).toBe('My string');
 });
 
 

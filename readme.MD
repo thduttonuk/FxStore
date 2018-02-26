@@ -18,21 +18,24 @@ class Store1State {
   }
 }
 
-export function getStore(): Store1State {
-  return { ...store.get(Store1State.name) };
-}
-
 @Command(Store1State)
-class Store1Command extends ReducerCommand<Store1State> {
+class IsLoadingCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsLoading = true;
   }
 }
 
 @Command(Store1State)
-class Store2Command extends ReducerCommand<Store1State> {
+class IsBusyCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsBusy = true;
+  }
+}
+
+@Command(Store1State)
+class SetValueCommand extends ReducerCommand<Store1State, string> {
+  public Handle() {
+    this.State.Value = this.Payload;
   }
 }
 
@@ -42,7 +45,11 @@ class Store2Command extends ReducerCommand<Store1State> {
 
 ```javascript
 
-  const store1Command = new Store1Command();
+  const store1Command = new IsLoadingCommand();
   store1Command.Dispatch();
+
+  const store1Command = new SetValueCommand();
+  store1Command.Dispatch('My new value');
+
   
 ```

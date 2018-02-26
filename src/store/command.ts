@@ -1,9 +1,10 @@
 import { Subject } from 'rxjs/Subject'
 
-export class ReducerCommand<T> {
+export class ReducerCommand<T, U> {
   public State: T;
+  public Payload: U;
   public CommandName: string;
-  public Dispatch: Function;
+  public Dispatch: (payload?: U) => {};
 }
 
 export class Store<T> {
@@ -29,7 +30,8 @@ export function Command(state: Function): PropertyDecorator {
       throw Error('Class name must end with Command');
     } else {
       target.prototype.CommandName = target.name;
-      target.prototype.Dispatch = () => {
+      target.prototype.Dispatch = (payload: any) => {
+        target.prototype.Payload = payload;
         target.prototype.State = { ...store.get(state.name) };
         target.prototype.Handle();
         store.set(state.name, target.prototype.State);
