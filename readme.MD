@@ -1,4 +1,4 @@
-## Creating a command
+## Creating commands and store state
 
 ```javascript
 
@@ -50,6 +50,5 @@ class SetValueCommand extends ReducerCommand<Store1State, string> {
 
   const store1Command = new SetValueCommand();
   store1Command.Dispatch('My new value');
-
   
 ```
