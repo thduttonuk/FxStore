@@ -3,11 +3,19 @@ import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 
 export class MemorizedSelector extends Subject<any> {
+  private lastValue: any;
+
   public func: Function;
   public storeName: string;
 
   public run() {
-    this.next(this.func(store.get(this.storeName)));
+    const newValue = this.func(store.get(this.storeName));
+
+    if (newValue !== this.lastValue) {
+      this.next(newValue);
+    }
+
+    this.lastValue = newValue;
   }
 }
 
@@ -61,7 +69,6 @@ export function createSelector<T>(select: (s: T) => {}, storeName: string): Obse
 
 function dispatchStateChange(storeName: string) {
   if (selectors.has(storeName)) {
-    console.log(storeName)
     const subjects = selectors.get(storeName);
 
     for (const subject of subjects) {

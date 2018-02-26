@@ -106,10 +106,11 @@ test('should emit an update', (done) => {
 
 test('should emit if two updates', (done) => {
   const o = createSelector<Store1State>(x => x.Value, Store1State.name);
-  o.pipe(bufferTime(100)).subscribe((values) => {
+  const sub = o.pipe(bufferTime(100)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
     done();
+    sub.unsubscribe();
   })
 
   const store3Command = new SetValueCommand();
@@ -117,19 +118,38 @@ test('should emit if two updates', (done) => {
   store3Command.Dispatch('My new string 1234');
 });
 
-xtest('should not emit if three updates if values are the same', (done) => {
+test('should not emit three updates if values are the same', (done) => {
   const o = createSelector<Store1State>(x => x.Value, Store1State.name);
-  o.pipe(bufferTime(100)).subscribe((values) => {
+  const sub = o.pipe(bufferTime(100)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
     expect(values.length).toBe(2);
     done();
+    sub.unsubscribe();
   })
 
   const store3Command = new SetValueCommand();
   store3Command.Dispatch('My new string 123');
   store3Command.Dispatch('My new string 123');
   store3Command.Dispatch('My new string 1234');
+});
+
+test('should emit two updates if commands are not the same', (done) => {
+  const o = createSelector<Store1State>(x => x.Value, Store1State.name);
+  const sub = o.pipe(bufferTime(100)).subscribe((values) => {
+    expect(values[0]).toBe('My new string 123');
+    expect(values[1]).toBe('My new string 1234');
+    expect(values.length).toBe(2);
+    done();
+    sub.unsubscribe();
+  })
+
+  const store3Command = new SetValueCommand();
+  store3Command.Dispatch('My new string 123');
+  store3Command.Dispatch('My new string 1234');
+
+  const store2Command = new IsBusyCommand();
+  store2Command.Dispatch();
 });
 
 
