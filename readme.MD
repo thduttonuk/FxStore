@@ -1,4 +1,4 @@
-## Creating commands and store state
+## Creating commands and store state example
 
 ```javascript
 
@@ -45,10 +45,18 @@ class SetValueCommand extends ReducerCommand<Store1State, string> {
 
 ```javascript
 
-  const isLoadingCommand = new IsLoadingCommand();
-  isLoadingCommand.Dispatch();
+const isLoadingCommand = new IsLoadingCommand();
+isLoadingCommand.Dispatch();
 
-  const setValueCommand = new SetValueCommand();
-  setValueCommand.Dispatch('My new value');
+const setValueCommand = new SetValueCommand();
+setValueCommand.Dispatch('My new value');
   
+```
+
+## Create a selector example
+
+````javascript
+
+const o = createSelector<Store1State>(x => x.IsLoading, Store1State.name);
+
 ```
