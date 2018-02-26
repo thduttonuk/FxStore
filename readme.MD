@@ -45,10 +45,10 @@ class SetValueCommand extends ReducerCommand<Store1State, string> {
 
 ```javascript
 
-  const store1Command = new IsLoadingCommand();
-  store1Command.Dispatch();
+  const isLoadingCommand = new IsLoadingCommand();
+  isLoadingCommand.Dispatch();
 
-  const store1Command = new SetValueCommand();
-  store1Command.Dispatch('My new value');
+  const setValueCommand = new SetValueCommand();
+  setValueCommand.Dispatch('My new value');
   
 ```
