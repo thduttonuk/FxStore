@@ -7,10 +7,6 @@ export class ReducerCommand<T, U> {
   public Dispatch: (payload?: U) => {};
 }
 
-export class Store<T> {
-  public State: T;
-}
-
 export const store = new Map<string, any>();
 
 export function State(): PropertyDecorator {
