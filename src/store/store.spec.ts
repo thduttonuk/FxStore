@@ -38,7 +38,7 @@ class SetValueCommand extends ReducerCommand<Store1State, string> {
 
 test('should throw if class is not named Command', () => {
   expect(() => {
-    @Command()
+    @Command(Store1State)
     class Store1 {
     }
   }).toThrow();
@@ -106,7 +106,7 @@ test('should emit an update', (done) => {
 
 test('should emit if two updates', (done) => {
   const o = createSelector<Store1State>(x => x.Value, Store1State.name);
-  const sub = o.pipe(bufferTime(100)).subscribe((values) => {
+  const sub = o.pipe(bufferTime(0)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
     done();
@@ -120,7 +120,7 @@ test('should emit if two updates', (done) => {
 
 test('should not emit three updates if values are the same', (done) => {
   const o = createSelector<Store1State>(x => x.Value, Store1State.name);
-  const sub = o.pipe(bufferTime(100)).subscribe((values) => {
+  const sub = o.pipe(bufferTime(0)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
     expect(values.length).toBe(2);
@@ -136,7 +136,7 @@ test('should not emit three updates if values are the same', (done) => {
 
 test('should emit two updates if commands are not the same', (done) => {
   const o = createSelector<Store1State>(x => x.Value, Store1State.name);
-  const sub = o.pipe(bufferTime(100)).subscribe((values) => {
+  const sub = o.pipe(bufferTime(0)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
     expect(values.length).toBe(2);
@@ -150,6 +150,20 @@ test('should emit two updates if commands are not the same', (done) => {
 
   const store2Command = new IsBusyCommand();
   store2Command.Dispatch();
+});
+
+test('should call 1000 times', (done) => {
+  const o = createSelector<Store1State>(x => x.Value, Store1State.name);
+  const sub = o.pipe(bufferTime(0)).subscribe((values) => {
+    expect(values.length).toBe(1000);
+    done();
+    sub.unsubscribe();
+  })
+
+  const store3Command = new SetValueCommand();
+  for (let i = 0; i < 1000; i++) {
+    store3Command.Dispatch(`n ${i}`);
+  }
 });
 
 
