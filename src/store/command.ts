@@ -25,7 +25,7 @@ export const store = new Map<string, any>();
 
 const selectors = new Map<string, Array<MemorizedSelector>>();
 
-export function State(): PropertyDecorator {
+export function State(): any {
   return function (target: Function) {
     if (!store.has(target.name)) {
       store.set(target.name, { ...target.prototype.initialize() });
@@ -36,7 +36,7 @@ export function State(): PropertyDecorator {
 /**
  * Pass in the state for the store
  */
-export function Command(state: Function): PropertyDecorator {
+export function Command(state: Function): any {
   return function (target: Function) {
     if (!target.name.endsWith('Command')) {
       throw Error('Class name must end with Command');
