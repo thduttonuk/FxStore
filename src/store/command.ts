@@ -1,10 +1,10 @@
-import { Subject } from 'rxjs/Subject'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
 import { distinctUntilChanged } from 'rxjs/Operators'
+import { skip } from 'rxjs/operators/skip';
 
-export class MemorizedSelector extends Subject<any> {
-  private lastValue: any;
+export class MemorizedSelector extends BehaviorSubject<any> {
 
   public func: Function;
   public storeName: string;
@@ -47,6 +47,7 @@ export function Command(state: Function): PropertyDecorator {
         target.prototype.State = { ...store.get(state.name) };
         target.prototype.Handle();
         store.set(state.name, target.prototype.State);
+
         dispatchStateChange(state.name);
       }
     }
@@ -54,7 +55,7 @@ export function Command(state: Function): PropertyDecorator {
 }
 
 export function createSelector<T>(select: (s: T) => {}, storeName: string): Observable<any> {
-  const subject = new MemorizedSelector();
+  const subject = new MemorizedSelector(select(store.get(storeName)));
   subject.func = select;
   subject.storeName = storeName;
 

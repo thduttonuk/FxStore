@@ -1,5 +1,5 @@
 import { Command, ReducerCommand, store, State, createSelector } from './command';
-import { take, bufferTime, filter } from 'rxjs/operators'
+import { take, bufferTime, filter, skip } from 'rxjs/operators'
 import { zip } from 'rxjs/observable/zip';
 
 @State()
@@ -56,7 +56,7 @@ test('should distpatch todos', (done) => {
   const todos$ = createSelector<TodosState>(x => x.Todos, TodosState.name);
   const todo$ = createSelector<TodoState>(x => x.Todo, TodoState.name);
 
-  const sub = zip(isLoading$, todos$.pipe(filter(x => x.length > 0)))
+  const sub = zip(isLoading$.pipe(skip(1)), todos$.pipe(filter(x => x.length > 0)))
     .subscribe((results: Array<any>) => {
 
       expect(results[0]).toBe(true);
@@ -67,7 +67,7 @@ test('should distpatch todos', (done) => {
       setTodoCommand.Dispatch(results[1][0]);
     })
 
-  const sub1 = todo$.subscribe((todo) => {
+  const sub1 = todo$.pipe(skip(1)).subscribe((todo) => {
     expect(todo).toEqual({ id: 1, name: 'todo 1' });
     sub1.unsubscribe();
     sub.unsubscribe();

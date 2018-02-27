@@ -1,5 +1,5 @@
 import { Command, ReducerCommand, store, State, createSelector } from './command';
-import { take, bufferTime } from 'rxjs/operators'
+import { take, bufferTime, skip } from 'rxjs/operators'
 
 @State()
 class Store1State {
@@ -95,10 +95,10 @@ test('should use payload', () => {
 
 test('should emit an update', (done) => {
   const value$ = createSelector<Store1State>(x => x.Value, Store1State.name);
-  const sub = value$.subscribe((value) => {
+  const sub = value$.pipe(skip(1)).subscribe((value) => {
     expect(value).toBe('My new string 123');
-    done();
     sub.unsubscribe();
+    done();
   })
 
   const store3Command = new SetValueCommand();
@@ -110,8 +110,8 @@ test('should emit if two updates', (done) => {
   const sub = value$.pipe(bufferTime(0)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
-    done();
     sub.unsubscribe();
+    done();
   })
 
   const store3Command = new SetValueCommand();
@@ -121,12 +121,12 @@ test('should emit if two updates', (done) => {
 
 test('should not emit three updates if values are the same', (done) => {
   const value$ = createSelector<Store1State>(x => x.Value, Store1State.name);
-  const sub = value$.pipe(bufferTime(0)).subscribe((values) => {
+  const sub = value$.pipe(skip(1), bufferTime(0)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
     expect(values.length).toBe(2);
-    done();
     sub.unsubscribe();
+    done();
   })
 
   const store3Command = new SetValueCommand();
@@ -137,12 +137,12 @@ test('should not emit three updates if values are the same', (done) => {
 
 test('should emit two updates if commands are not the same', (done) => {
   const value$ = createSelector<Store1State>(x => x.Value, Store1State.name);
-  const sub = value$.pipe(bufferTime(0)).subscribe((values) => {
+  const sub = value$.pipe(skip(1), bufferTime(0)).subscribe((values) => {
     expect(values[0]).toBe('My new string 123');
     expect(values[1]).toBe('My new string 1234');
     expect(values.length).toBe(2);
-    done();
     sub.unsubscribe();
+    done();
   })
 
   const store3Command = new SetValueCommand();
@@ -155,10 +155,10 @@ test('should emit two updates if commands are not the same', (done) => {
 
 test('should call 1000 times', (done) => {
   const value$ = createSelector<Store1State>(x => x.Value, Store1State.name);
-  const sub = value$.pipe(bufferTime(0)).subscribe((values) => {
+  const sub = value$.pipe(skip(1), bufferTime(0)).subscribe((values) => {
     expect(values.length).toBe(1000);
-    done();
     sub.unsubscribe();
+    done();
   })
 
   const store3Command = new SetValueCommand();
