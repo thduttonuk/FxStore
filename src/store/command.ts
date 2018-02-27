@@ -58,7 +58,8 @@ export function createSelector<T>(select: (s: T) => {}, storeName: string): Obse
   subject.func = select;
   subject.storeName = storeName;
 
-  selectors.set(storeName, [subject]);
+  selectors.set(storeName, [...(selectors.get(storeName) || []), subject]);
+
   return subject.pipe(distinctUntilChanged());
 }
 

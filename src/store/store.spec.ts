@@ -95,9 +95,10 @@ test('should use payload', () => {
 
 test('should emit an update', (done) => {
   const value$ = createSelector<Store1State>(x => x.Value, Store1State.name);
-  value$.subscribe((value) => {
+  const sub = value$.subscribe((value) => {
     expect(value).toBe('My new string 123');
     done();
+    sub.unsubscribe();
   })
 
   const store3Command = new SetValueCommand();
