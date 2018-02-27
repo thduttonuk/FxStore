@@ -1,6 +1,7 @@
 import { Subject } from 'rxjs/Subject'
 import { Observable } from 'rxjs/Observable';
 import { Observer } from 'rxjs/Observer';
+import { distinctUntilChanged } from 'rxjs/Operators'
 
 export class MemorizedSelector extends Subject<any> {
   private lastValue: any;
@@ -9,13 +10,7 @@ export class MemorizedSelector extends Subject<any> {
   public storeName: string;
 
   public run() {
-    const newValue = this.func(store.get(this.storeName));
-
-    if (newValue !== this.lastValue) {
-      this.next(newValue);
-    }
-
-    this.lastValue = newValue;
+    this.next(this.func(store.get(this.storeName)));
   }
 }
 
@@ -64,7 +59,7 @@ export function createSelector<T>(select: (s: T) => {}, storeName: string): Obse
   subject.storeName = storeName;
 
   selectors.set(storeName, [subject]);
-  return subject;
+  return subject.pipe(distinctUntilChanged());
 }
 
 function dispatchStateChange(storeName: string) {
