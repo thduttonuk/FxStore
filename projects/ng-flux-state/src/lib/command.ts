@@ -1,5 +1,5 @@
 import { Observable } from 'rxjs';
-import { distinctUntilChanged } from 'rxjs/Operators'
+import { distinctUntilChanged } from 'rxjs/operators';
 import { MemorizedSelector } from './MemorizedSelector';
 
 export class ReducerCommand<T, U> {
@@ -26,18 +26,22 @@ export function State(): any {
  */
 export function Command(state: Function): any {
   return function (target: Function) {
-    if (!target.name.endsWith('Command')) {
-      throw Error('Class name must end with Command');
-    } else {
-      target.prototype.CommandName = target.name;
-      target.prototype.Dispatch = (payload: any) => {
-        target.prototype.Payload = payload;
-        target.prototype.State = { ...store.get(state.name) };
-        target.prototype.Handle();
-        store.set(state.name, target.prototype.State);
+    try {
+      if (!target.name.endsWith('Command')) {
+        throw Error('Class name must end with Command');
+      } else {
+        target.prototype.CommandName = target.name;
+        target.prototype.Dispatch = (payload: any) => {
+          target.prototype.Payload = payload;
+          target.prototype.State = { ...store.get(state.name) };
+          target.prototype.Handle();
+          store.set(state.name, target.prototype.State);
 
-        dispatchStateChange(state.name);
-      };
+          dispatchStateChange(state.name);
+        };
+      }
+    } catch (err) {
+      console.error(err);
     }
   };
 }
