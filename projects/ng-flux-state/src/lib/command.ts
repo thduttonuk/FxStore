@@ -24,24 +24,20 @@ export function State(): any {
 /**
  * Pass in the state for the store
  */
-export function Command(state: Function): any {
+export function Command(stateName) {
   return function (target: Function) {
-    try {
-      if (!target.name.endsWith('Command')) {
-        throw Error('Class name must end with Command');
-      } else {
-        target.prototype.CommandName = target.name;
-        target.prototype.Dispatch = (payload: any) => {
-          target.prototype.Payload = payload;
-          target.prototype.State = { ...store.get(state.name) };
-          target.prototype.Handle();
-          store.set(state.name, target.prototype.State);
+    if (!target.name.endsWith('Command')) {
+      throw Error('Class name must end with Command');
+    } else {
+      target.prototype.CommandName = target.name;
+      target.prototype.Dispatch = (payload: any) => {
+        target.prototype.Payload = payload;
+        target.prototype.State = { ...store.get(stateName) };
+        target.prototype.Handle();
+        store.set(stateName, target.prototype.State);
 
-          dispatchStateChange(state.name);
-        };
-      }
-    } catch (err) {
-      console.error(err);
+        dispatchStateChange(stateName);
+      };
     }
   };
 }

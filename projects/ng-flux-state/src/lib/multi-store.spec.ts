@@ -26,21 +26,21 @@ class TodoState {
   }
 }
 
-@Command(TodosState)
+@Command(TodosState.name)
 class SetIsLoadingCommand extends ReducerCommand<TodosState, boolean> {
   public Handle() {
     this.State.IsLoading = this.Payload;
   }
 }
 
-@Command(TodosState)
+@Command(TodosState.name)
 class SetTodosCommand extends ReducerCommand<TodosState, Array<any>> {
   public Handle() {
     this.State.Todos = this.Payload;
   }
 }
 
-@Command(TodoState)
+@Command(TodoState.name)
 class SetTodoCommand extends ReducerCommand<TodoState, {}> {
   public Handle() {
     this.State.Todo = this.Payload;

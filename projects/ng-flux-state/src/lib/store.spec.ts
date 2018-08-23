@@ -15,21 +15,21 @@ class Store1State {
   }
 }
 
-@Command(Store1State)
+@Command(Store1State.name)
 class IsLoadingCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsLoading = true;
   }
 }
 
-@Command(Store1State)
+@Command(Store1State.name)
 class IsBusyCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsBusy = true;
   }
 }
 
-@Command(Store1State)
+@Command(Store1State.name)
 class SetValueCommand extends ReducerCommand<Store1State, string> {
   public Handle() {
     this.State.Value = this.Payload;
@@ -40,7 +40,7 @@ describe('Store Spec', () => {
 
   it('should throw if class is not named Command', () => {
     expect(() => {
-      @Command(Store1State)
+      @Command(Store1State.name)
       class Store1 {
       }
     }).toThrow();
