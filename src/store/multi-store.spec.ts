@@ -1,5 +1,5 @@
-import { Command, ReducerCommand, store, State, createSelector } from './command';
-import { take, bufferTime, filter, skip } from 'rxjs/operators'
+import { Command, ReducerCommand, State, createSelector } from './command';
+import { filter, skip } from 'rxjs/operators'
 import { zip } from 'rxjs/observable/zip';
 
 @State()

@@ -1,18 +1,6 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
 import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
 import { distinctUntilChanged } from 'rxjs/Operators'
-import { skip } from 'rxjs/operators/skip';
-
-export class MemorizedSelector extends BehaviorSubject<any> {
-
-  public func: Function;
-  public storeName: string;
-
-  public run() {
-    this.next(this.func(store.get(this.storeName)));
-  }
-}
+import { MemorizedSelector } from './MemorizedSelector';
 
 export class ReducerCommand<T, U> {
   public State: T;
