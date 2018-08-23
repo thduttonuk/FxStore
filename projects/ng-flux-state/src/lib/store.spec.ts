@@ -38,14 +38,6 @@ class SetValueCommand extends ReducerCommand<Store1State, string> {
 
 describe('Store Spec', () => {
 
-  it('should throw if class is not named Command', () => {
-    expect(() => {
-      @Command(Store1State.name)
-      class Store1 {
-      }
-    }).toThrow();
-  });
-
   function getStore(): Store1State {
     return { ...store.get(Store1State.name) };
   }
