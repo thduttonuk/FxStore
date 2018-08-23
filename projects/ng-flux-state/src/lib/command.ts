@@ -11,14 +11,14 @@ export class ReducerCommand<T, U> {
 
 export const store = new Map<string, any>();
 
-const selectors = new Map<string, Array<MemorizedSelector>>();
+const selectors = new Map<string, Array<MemorizedSelector<any>>>();
 
 export function State(): any {
   return function (target: Function) {
     if (!store.has(target.name)) {
       store.set(target.name, { ...target.prototype.initialize() });
     }
-  }
+  };
 }
 
 /**
@@ -37,12 +37,12 @@ export function Command(state: Function): any {
         store.set(state.name, target.prototype.State);
 
         dispatchStateChange(state.name);
-      }
+      };
     }
-  }
+  };
 }
 
-export function createSelector<T>(select: (s: T) => {}, storeName: string): Observable<any> {
+export function createSelector<T, U>(select: (s: T) => U, storeName: string) {
   const subject = new MemorizedSelector(select(store.get(storeName)));
   subject.func = select;
   subject.storeName = storeName;

@@ -1,62 +1,27 @@
-## Creating commands and store state example
+# NgFluxStore
 
-```javascript
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.1.0.
 
-import { Command, ReducerCommand, State } from './command';
+## Development server
 
-@State()
-class Store1State {
-  public IsLoading: boolean;
-  public IsBusy: boolean;
-  public Value: string;
+Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-  public initialize() {
-    this.IsLoading = false;
-    this.IsBusy = false;
-    this.Value = '';
-    return this;
-  }
-}
+## Code scaffolding
 
-@Command(Store1State)
-class IsLoadingCommand extends ReducerCommand<Store1State, any> {
-  public Handle() {
-    this.State.IsLoading = true;
-  }
-}
+Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-@Command(Store1State)
-class IsBusyCommand extends ReducerCommand<Store1State, any> {
-  public Handle() {
-    this.State.IsBusy = true;
-  }
-}
+## Build
 
-@Command(Store1State)
-class SetValueCommand extends ReducerCommand<Store1State, string> {
-  public Handle() {
-    this.State.Value = this.Payload;
-  }
-}
+Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-```
+## Running unit tests
 
-## Dispatch a command example
+Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
 
-```javascript
+## Running end-to-end tests
 
-const isLoadingCommand = new IsLoadingCommand();
-isLoadingCommand.Dispatch();
+Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
 
-const setValueCommand = new SetValueCommand();
-setValueCommand.Dispatch('My new value');
-  
-```
+## Further help
 
-## Create a selector example
-
-```javascript
-
-const o = createSelector<Store1State>(x => x.IsLoading, Store1State.name);
-
-```
+To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
