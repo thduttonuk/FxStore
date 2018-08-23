@@ -1,4 +1,4 @@
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/Operators'
 import { MemorizedSelector } from './MemorizedSelector';
 

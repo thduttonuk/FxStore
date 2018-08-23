@@ -1,6 +1,6 @@
 import { Command, ReducerCommand, State, createSelector } from './command';
 import { filter, skip } from 'rxjs/operators'
-import { zip } from 'rxjs/observable/zip';
+import { zip } from 'rxjs';
 
 @State()
 class TodosState {

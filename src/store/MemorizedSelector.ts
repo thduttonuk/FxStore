@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 import { store } from './command';
 
 export class MemorizedSelector extends BehaviorSubject<any> {
