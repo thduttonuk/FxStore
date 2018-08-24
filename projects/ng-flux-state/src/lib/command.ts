@@ -1,6 +1,7 @@
 import { Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { MemorizedSelector } from './MemorizedSelector';
+import { store } from './store';
 
 export class ReducerCommand<T, U> {
   public State: T;
@@ -8,8 +9,6 @@ export class ReducerCommand<T, U> {
   public CommandName: string;
   public Dispatch: (payload?: U) => {};
 }
-
-export const store = new Map<string, any>();
 
 const selectors = new Map<string, Array<MemorizedSelector<any>>>();
 
