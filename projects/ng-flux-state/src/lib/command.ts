@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { MemorizedSelector } from './MemorizedSelector';
 import { store } from './store';
