@@ -1,5 +1,6 @@
-import { Command, ReducerCommand, store, State, createSelector } from './command';
+import { Command, ReducerCommand, State, createSelector } from './command';
 import { bufferTime, skip } from 'rxjs/operators';
+import { store } from './store';
 
 @State()
 class Store1State {
