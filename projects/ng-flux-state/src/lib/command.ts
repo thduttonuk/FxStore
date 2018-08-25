@@ -1,6 +1,7 @@
 import { distinctUntilChanged } from 'rxjs/operators';
 import { MemorizedSelector } from './MemorizedSelector';
 import { store } from './store';
+import { Observable } from 'rxjs';
 
 export class ReducerCommand<T, U> {
   public State: T;
@@ -36,7 +37,7 @@ export function Command(storeName: string) {
   };
 }
 
-export function createSelector<T, U>(storeName: string, select: (s: T) => U) {
+export function createSelector<T, U>(storeName: string, select: (s: T) => U): Observable<U> {
   const subject = new MemorizedSelector(select(store.get(storeName)));
   subject.func = select;
   subject.storeName = storeName;
