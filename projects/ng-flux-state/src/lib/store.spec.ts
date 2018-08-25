@@ -1,5 +1,5 @@
 import { Command, ReducerCommand, State, createSelector } from './command';
-import { bufferTime, skip } from 'rxjs/operators';
+import { bufferTime, skip, first } from 'rxjs/operators';
 import { store } from './store';
 
 @State()
@@ -70,6 +70,24 @@ describe('Store Spec', () => {
 
     expect(getStore().Value).toBe('');
   });
+
+  it('should be immuteable', (done) => {
+    const value$ = createSelector<Store1State, string>(Store1State.name, x => x.Value);
+    const sub = value$.pipe(skip(1)).subscribe((v1) => {
+      expect(v1).toBe('My new string 123');
+      sub.unsubscribe();
+      v1 = 'test 123';
+
+      value$.pipe(first()).subscribe((v2) => {
+        expect(v2).toBe('My new string 123');
+        done();
+      });
+    });
+
+    const store3Command = new SetValueCommand();
+    store3Command.Dispatch('My new string 123');
+  });
+
 
   it('should use payload', () => {
     const store3Command = new SetValueCommand();
