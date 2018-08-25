@@ -78,7 +78,7 @@ describe('Store Spec', () => {
   });
 
   it('should emit an update', (done) => {
-    const value$ = createSelector<Store1State, string>(x => x.Value, Store1State.name);
+    const value$ = createSelector<Store1State, string>(Store1State.name, x => x.Value);
     const sub = value$.pipe(skip(1)).subscribe((value) => {
       expect(value).toBe('My new string 123');
       sub.unsubscribe();
@@ -90,7 +90,7 @@ describe('Store Spec', () => {
   });
 
   it('should emit if two updates', (done) => {
-    const value$ = createSelector<Store1State, string>(x => x.Value, Store1State.name);
+    const value$ = createSelector<Store1State, string>(Store1State.name, x => x.Value);
     const sub = value$.pipe(bufferTime(0)).subscribe((values) => {
       expect(values[0]).toBe('My new string 123');
       expect(values[1]).toBe('My new string 1234');
@@ -104,7 +104,7 @@ describe('Store Spec', () => {
   });
 
   it('should not emit three updates if values are the same', (done) => {
-    const value$ = createSelector<Store1State, string>(x => x.Value, Store1State.name);
+    const value$ = createSelector<Store1State, string>(Store1State.name, x => x.Value);
     const sub = value$.pipe(skip(1), bufferTime(0)).subscribe((values) => {
       expect(values[0]).toBe('My new string 123');
       expect(values[1]).toBe('My new string 1234');
@@ -120,7 +120,7 @@ describe('Store Spec', () => {
   });
 
   it('should emit two updates if commands are not the same', (done) => {
-    const value$ = createSelector<Store1State, string>(x => x.Value, Store1State.name);
+    const value$ = createSelector<Store1State, string>(Store1State.name, x => x.Value);
     const sub = value$.pipe(skip(1), bufferTime(0)).subscribe((values) => {
       expect(values[0]).toBe('My new string 123');
       expect(values[1]).toBe('My new string 1234');
@@ -138,7 +138,7 @@ describe('Store Spec', () => {
   });
 
   it('should call 1000 times', (done) => {
-    const value$ = createSelector<Store1State, string>(x => x.Value, Store1State.name);
+    const value$ = createSelector<Store1State, string>(Store1State.name, x => x.Value);
     const sub = value$.pipe(skip(1), bufferTime(0)).subscribe((values) => {
       expect(values.length).toBe(1000);
       sub.unsubscribe();

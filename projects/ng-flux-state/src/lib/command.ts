@@ -24,21 +24,21 @@ export function State(): any {
 /**
  * Pass in the state for the store
  */
-export function Command(stateName) {
+export function Command(storeName: string) {
   return function (target: Function) {
     target.prototype.CommandName = target.name;
     target.prototype.Dispatch = (payload: any) => {
       target.prototype.Payload = payload;
-      target.prototype.State = { ...store.get(stateName) };
+      target.prototype.State = { ...store.get(storeName) };
       target.prototype.Handle();
-      store.set(stateName, target.prototype.State);
+      store.set(storeName, target.prototype.State);
 
-      dispatchStateChange(stateName);
+      dispatchStateChange(storeName);
     };
   };
 }
 
-export function createSelector<T, U>(select: (s: T) => U, storeName: string) {
+export function createSelector<T, U>(storeName: string, select: (s: T) => U) {
   const subject = new MemorizedSelector(select(store.get(storeName)));
   subject.func = select;
   subject.storeName = storeName;
