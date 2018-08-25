@@ -1,5 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
-import { store } from './command';
+import { store } from './store';
 
 export class MemorizedSelector<T> extends BehaviorSubject<T> {
   public func: (x) => T;
