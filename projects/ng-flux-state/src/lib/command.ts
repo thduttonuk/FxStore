@@ -2,8 +2,9 @@ import { Observable } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { MemorizedSelector } from './MemorizedSelector';
 import { store } from './store';
+import { Type } from '@angular/core';
 
-export class ReducerCommand<T, U> {
+export abstract class ReducerCommand<T, U> {
   public State: T;
   public Payload: U;
   public CommandName: string;
@@ -21,10 +22,14 @@ export function State(): any {
 }
 
 /**
- * Pass in the state for the store
+ * Decorator that indicates a command class and declares the
+ * type of state it handles.
+ *
+ * @param stateType The type of a state class or the name of the type.
  */
-export function Command(stateName) {
+export function Command(stateType: Type<any> | string) {
   return function (target: Function) {
+    const stateName: string = stateType['name'] || stateType;
     target.prototype.CommandName = target.name;
     target.prototype.Dispatch = (payload: any) => {
       target.prototype.Payload = payload;

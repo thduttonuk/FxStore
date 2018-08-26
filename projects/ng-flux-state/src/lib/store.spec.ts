@@ -16,21 +16,21 @@ class Store1State {
   }
 }
 
-@Command(Store1State.name)
+@Command(Store1State)
 class IsLoadingCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsLoading = true;
   }
 }
 
-@Command(Store1State.name)
+@Command(Store1State)
 class IsBusyCommand extends ReducerCommand<Store1State, any> {
   public Handle() {
     this.State.IsBusy = true;
   }
 }
 
-@Command(Store1State.name)
+@Command(Store1State)
 class SetValueCommand extends ReducerCommand<Store1State, string> {
   public Handle() {
     this.State.Value = this.Payload;
