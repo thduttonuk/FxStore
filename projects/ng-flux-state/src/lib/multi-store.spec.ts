@@ -53,9 +53,9 @@ const setTodoCommand = new SetTodoCommand();
 
 describe('Multi Store Spec', () => {
   it('should distpatch todos', (done) => {
-    const isLoading$ = createSelector<TodosState, boolean>(x => x.IsLoading, TodosState.name);
-    const todos$ = createSelector<TodosState, any[]>(x => x.Todos, TodosState.name);
-    const todo$ = createSelector<TodoState, any>(x => x.Todo, TodoState.name);
+    const isLoading$ = createSelector<TodosState, boolean>(TodosState.name, x => x.IsLoading);
+    const todos$ = createSelector<TodosState, any[]>(TodosState.name, x => x.Todos);
+    const todo$ = createSelector<TodoState, any>(TodoState.name, x => x.Todo);
 
     const sub = zip(isLoading$.pipe(skip(1)), todos$.pipe(filter(x => x.length > 0)))
       .subscribe((results: Array<any>) => {
