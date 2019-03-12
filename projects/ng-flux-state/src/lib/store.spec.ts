@@ -2,18 +2,11 @@ import { Command, ReducerCommand, State, createSelector } from './command';
 import { bufferTime, skip, first } from 'rxjs/operators';
 import { store } from './store';
 
-@State()
+@State
 class Store1State {
-  public IsLoading: boolean;
-  public IsBusy: boolean;
-  public Value: string;
-
-  public initialize() {
-    this.IsLoading = false;
-    this.IsBusy = false;
-    this.Value = '';
-    return this;
-  }
+  public IsLoading = false;
+  public IsBusy = false;
+  public Value = '';
 }
 
 @Command(Store1State)

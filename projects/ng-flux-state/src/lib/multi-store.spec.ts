@@ -2,28 +2,16 @@ import { Command, ReducerCommand, State, createSelector } from './command';
 import { filter, skip } from 'rxjs/operators';
 import { zip } from 'rxjs';
 
-@State()
+@State
 class TodosState {
-  public IsLoading: boolean;
-  public IsBusy: boolean;
-  public Todos: Array<any>;
-
-  public initialize() {
-    this.IsLoading = false;
-    this.IsBusy = false;
-    this.Todos = [];
-    return this;
-  }
+  public IsLoading = false;
+  public IsBusy = false;
+  public Todos: Array<any> = [];
 }
 
-@State()
+@State
 class TodoState {
   public Todo: {};
-
-  public initialize() {
-    this.Todo = '';
-    return this;
-  }
 }
 
 @Command(TodosState)

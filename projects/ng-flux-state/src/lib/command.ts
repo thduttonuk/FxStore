@@ -13,12 +13,10 @@ export abstract class ReducerCommand<T, U> {
 
 const selectors = new Map<string, Array<MemorizedSelector<any>>>();
 
-export function State(): any {
-  return function (target: Function) {
-    if (!store.has(target.name)) {
-      store.set(target.name, { ...target.prototype.initialize() });
-    }
-  };
+export function State<T extends { new(...args: any[]): {} }>(constructor: T) {
+  if (!store.has(constructor.name)) {
+    store.set(constructor.name, new constructor());
+  }
 }
 
 /**

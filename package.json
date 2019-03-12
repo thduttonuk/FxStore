@@ -6,8 +6,7 @@
     "publish": "ng build NgFluxState --prod && npm publish ./dist/ng-flux-state && rm -R ./dist",
     "start": "ng serve",
     "build": "ng build",
-    "test": "ng test",
-    "test:NgFluxState": "ng test NgFluxState",
+    "test": "ng test NgFluxState",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
