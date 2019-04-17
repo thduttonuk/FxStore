@@ -27,16 +27,18 @@ export function State<T extends { new(...args: any[]): {} }>(constructor: T) {
  */
 export function Command(stateType: Type<any> | string) {
   return function (target: Function) {
-    const storeName: string = stateType['name'] || stateType;
-    target.prototype.CommandName = target.name;
-    target.prototype.Dispatch = (payload: any) => {
-      target.prototype.Payload = payload;
-      target.prototype.State = { ...store.get(storeName) };
-      target.prototype.Handle();
-      store.set(storeName, target.prototype.State);
+    if (stateType) {
+      const storeName: string = stateType['name'] || stateType;
+      target.prototype.CommandName = target.name;
+      target.prototype.Dispatch = (payload: any) => {
+        target.prototype.Payload = payload;
+        target.prototype.State = { ...store.get(storeName) };
+        target.prototype.Handle();
+        store.set(storeName, target.prototype.State);
 
-      dispatchStateChange(storeName);
-    };
+        dispatchStateChange(storeName);
+      };
+    }
   };
 }
 
